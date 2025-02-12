@@ -1,6 +1,7 @@
 import {app, BrowserWindow} from 'electron';
 import path from 'path';
 import { isDev } from './util.js';
+import { pollResource } from './resourceManger.js';
 
 
 type test = string;
@@ -13,4 +14,6 @@ app.on("ready", () => {
     mainWindow.loadFile(path.join(app.getAppPath() + '/dist-react/index.html'));
  }
  mainWindow.loadFile(path.join(app.getAppPath() + '/dist-react/index.html'));
+
+ pollResource();
 });
