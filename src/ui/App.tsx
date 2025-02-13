@@ -7,8 +7,7 @@ function App() {
 
  
   useEffect(() => {
-    // @ts-ignore
-    window.electron.subscribeStatistics(stats => console.log(stats));
+    window.electron.subscribeStatistics((stats: unknown) => console.log(stats));
   }, []);
 
 
