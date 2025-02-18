@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 
 import "./App.css";
+import { useStatistics } from "./useStatistics";
 
 function App() {
   const [count, setCount] = useState(0);
+  const statistics = useStatistics(10);
+
+  console.log(statistics);
 
  
-  useEffect(() => {
-    window.electron.subscribeStatistics((stats: unknown) => console.log(stats));
-  }, []);
-
-
   return (
     <>
       <div></div>
