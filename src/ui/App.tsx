@@ -1,18 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import "./App.css";
 import { useStatistics } from "./useStatistics";
+import { Chart } from "./Chart";
 
 function App() {
   const [count, setCount] = useState(0);
   const statistics = useStatistics(10);
+  const cpuUsage = useMemo(
+    () => statistics.map((stat) => stat.cpuUsage),
+    [statistics]
+  );
 
   console.log(statistics);
 
- 
   return (
     <>
-      <div></div>
+      <div style={{height:120}}>
+        <Chart data={cpuUsage} maxDataPoints={10}/>
+      </div>
       <h1>Vite + React</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
