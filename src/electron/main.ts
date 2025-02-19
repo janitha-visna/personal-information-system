@@ -33,4 +33,19 @@ app.on("ready", () => {
       process.platform === "win32" ? "trayIcon.png" : "trayIcon.png"
     )
   );
+
+  handleCloseEvents(mainWindow);
+ 
 });
+
+
+ function handleCloseEvents(mainWindow: BrowserWindow) {
+   let willClose = false;
+
+   mainWindow.on("close", (e) => {
+     e.preventDefault();
+     mainWindow.hide();
+   });
+
+   
+ }
