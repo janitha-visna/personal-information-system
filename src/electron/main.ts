@@ -3,7 +3,7 @@ import path from "path";
 import { ipcMainHandle, isDev } from "./util.js";
 import { getStaticData, pollResource } from "./resourceManger.js";
 import { getAssetsPath, getPreloadPath, getUIPath } from "./pathResolver.js";
-
+import { createTray } from "./tray.js";
 
 type test = string;
 
@@ -19,33 +19,22 @@ app.on("ready", () => {
   } else {
     mainWindow.loadFile(getUIPath());
   }
-  
 
   pollResource(mainWindow);
 
-  ipcMainHandle('getStaticData', () => {
+  ipcMainHandle("getStaticData", () => {
     return getStaticData();
   });
 
-  new Tray(
-    path.join(
-      getAssetsPath(),
-      process.platform === "win32" ? "trayIcon.png" : "trayIcon.png"
-    )
-  );
-
+  createTray(mainWindow);
   handleCloseEvents(mainWindow);
- 
 });
 
+function handleCloseEvents(mainWindow: BrowserWindow) {
+  let willClose = false;
 
- function handleCloseEvents(mainWindow: BrowserWindow) {
-   let willClose = false;
-
-   mainWindow.on("close", (e) => {
-     e.preventDefault();
-     mainWindow.hide();
-   });
-
-   
- }
+  mainWindow.on("close", (e) => {
+    e.preventDefault();
+    mainWindow.hide();
+  });
+}
