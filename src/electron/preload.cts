@@ -8,11 +8,17 @@ electron.contextBridge.exposeInMainWorld("electron", {
     }),
 
   getStaticData: () => ipcInvoke('getStaticData'),
+  
+  subscribeChangeView: (callback) =>
+    ipcOn('changeView', (view) => {
+      callback(view);
+    }),
 } satisfies Window['electron']);
 
 interface EventPayloadMapping {
   getStaticData: StaticData;
   statistics: Statistics;
+  changeView: View;
 }
 
 function ipcInvoke<Key extends keyof EventPayloadMapping>(

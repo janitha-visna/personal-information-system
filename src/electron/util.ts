@@ -1,11 +1,12 @@
 import { ipcMain, WebContents, WebFrameMain } from "electron";
 import { getUIPath } from "./pathResolver.js";
 import { pathToFileURL } from "url";
-import { StaticData, Statistics } from "../ui/types/electron.js";
 
 interface EventPayloadMapping {
   getStaticData: StaticData;
   statistics: Statistics;
+  changeView:View
+  
 }
 
 export function isDev(): boolean {

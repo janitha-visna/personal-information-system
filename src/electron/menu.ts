@@ -1,6 +1,6 @@
 import { app, BrowserWindow, Menu } from "electron";
 import { Label } from "recharts";
-import { isDev } from "./util.js";
+import { ipcWebContentsSend, isDev } from "./util.js";
 
 export function createMenu(mainWindow: BrowserWindow) {
   Menu.setApplicationMenu(
@@ -15,8 +15,8 @@ export function createMenu(mainWindow: BrowserWindow) {
           },
           {
             label: "Devtools",
-            click: ()=>mainWindow.webContents.openDevTools(),
-            visible:isDev(),
+            click: () => mainWindow.webContents.openDevTools(),
+            visible: isDev(),
           },
         ],
       },
@@ -26,12 +26,22 @@ export function createMenu(mainWindow: BrowserWindow) {
         submenu: [
           {
             label: "CPU",
+            click: () =>
+              ipcWebContentsSend("changeView", mainWindow.webContents, "CPU"),
           },
           {
             label: "RAM",
+            click: () =>
+              ipcWebContentsSend("changeView", mainWindow.webContents, "RAM"),
           },
           {
             label: "STORAGE",
+            click: () =>
+              ipcWebContentsSend(
+                "changeView",
+                mainWindow.webContents,
+                "STORAGE"
+              ),
           },
         ],
       },
