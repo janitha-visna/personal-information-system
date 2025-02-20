@@ -5,8 +5,8 @@ import { pathToFileURL } from "url";
 interface EventPayloadMapping {
   getStaticData: StaticData;
   statistics: Statistics;
-  changeView:View
-  
+  changeView: View;
+  sendFrameAction: FrameWindowAction;
 }
 
 export function isDev(): boolean {
@@ -21,6 +21,17 @@ export function ipcMainHandle<Key extends keyof EventPayloadMapping>(
     if (!event.senderFrame) throw new Error("No sender frame");
     validateEventFrame(event.senderFrame);
     return handler();
+  });
+}
+
+export function ipcMainOn<Key extends keyof EventPayloadMapping>(
+  key: Key,
+  handler: (payload: EventPayloadMapping[Key]) => void
+) {
+  ipcMain.on(key, (event,payload) => {
+    if (!event.senderFrame) throw new Error("No sender frame");
+    validateEventFrame(event.senderFrame);
+    return handler(payload);
   });
 }
 

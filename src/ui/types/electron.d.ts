@@ -1,20 +1,35 @@
-export type Statistics = {
+type Statistics = {
   cpuUsage: number;
   RamUsage: number;
   storageData: number;
 };
 
-export type StaticData = {
+type StaticData = {
   totalStorage: number;
   cpuModel: string;
   toatalMemoryGB: number;
 };
 
-declare global {
-  interface Window {
-    electron: {
-      subscribeStatistics: (callback: (statistics: Statistics) => void) => void;
-      getStaticData: () => Promise<StaticData>;
-    };
-  }
+type View = "CPU" | "RAM" | "STORAGE";
+
+type FrameWindowAction = 'CLOSE' | 'MAXIMIZE' | 'MINIMIZE';
+
+type EventPayloadMapping = {
+  statistics: Statistics;
+  staticData: StaticData;
+  changeView: View;
+  sendFrameAction: FrameWindowAction;
+};
+
+type UnsubscribeFuntion = () => void;
+
+interface Window {
+  electron: {
+    subscribeStatistics: (
+      callback: (statistics: Statistics) => void
+    ) => UnsubscribeFuntion;
+    getStaticData: () => Promise<StaticData>;
+    subscribeChangeView: (callback: (view: View) => void) => UnsubscribeFuntion;
+    sendFrameAction: (payload: FrameWindowAction) => void;
+  };
 }
