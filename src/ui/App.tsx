@@ -1,10 +1,25 @@
-import { useEffect, useMemo, useState } from "react";
-
+import React, { useEffect, useMemo, useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import { useStatistics } from "./useStatistics";
 import { Chart } from "./Chart";
+import { BlankPage } from "./BlankPage";
+import { Navigation } from "./Navigation";
+import { Header } from "./Header"; // Import the Header component
 
 function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigation />} />
+        <Route path="/app" element={<AppContent />} />
+        <Route path="/blank" element={<BlankPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+function AppContent() {
   const staticData = useStaticData();
   const statistics = useStatistics(10);
   const [activeView, setActiveView] = useState<View>("CPU");
@@ -37,7 +52,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
+      <Header /> {/* Use the Header component here */}
       <div className="main">
         <div>
           <SelectOption
@@ -91,25 +106,6 @@ function SelectOption(props: {
         <Chart selectedView={props.view} data={props.data} maxDataPoints={10} />
       </div>
     </button>
-  );
-}
-
-function Header() {
-  return (
-    <header>
-      <button
-        id="close"
-        onClick={() => window.electron.sendFrameAction("CLOSE")}
-      />
-      <button
-        id="minimize"
-        onClick={() => window.electron.sendFrameAction("MINIMIZE")}
-      />
-      <button
-        id="maximize"
-        onClick={() => window.electron.sendFrameAction("MAXIMIZE")}
-      />
-    </header>
   );
 }
 
